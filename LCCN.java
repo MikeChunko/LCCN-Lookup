@@ -9,14 +9,21 @@ import java.net.URL;
  */
 public class LCCN {
     public static void main(String[] args) throws IOException {
+        String search_query = "";
+
+        // No arguments were given
+        try {
+            search_query = args[0];
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Please provide the search query as an argument");
+        }
+
         // The URL to be searched
-        String search_query = args[0];
         search_query = search_query.replaceAll(" ", "+");
         URL url = new URL("https://catalog.loc.gov/vwebv/search?searchCode=TALL&searchArg=" + search_query + "&searchType=1");
         BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
         String inputLine;
         boolean single_result = false;
-        System.out.println(search_query);
 
         while ((inputLine = in.readLine()) != null) {
             // The search yielded only one result

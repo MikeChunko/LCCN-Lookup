@@ -9,13 +9,13 @@ import java.net.URL;
  */
 public class LCCN {
     public static void main(String[] args) throws IOException {
-        String search_query = "";
+        String search_query;
 
         // No arguments were given
         try {
             search_query = args[0];
         } catch (IndexOutOfBoundsException e) {
-            System.out.println("Please provide the search query as an argument");
+            throw new IllegalArgumentException("Please provide the search query as an argument");
         }
 
         // The URL to be searched
@@ -26,6 +26,11 @@ public class LCCN {
         boolean single_result = false;
 
         while ((inputLine = in.readLine()) != null) {
+            if (inputLine.contains("in use")) {
+                System.out.println("All Library of Congress connections are currently in use");
+                break;
+            }
+
             // The search yielded only one result
             if (inputLine.contains("Permalink")) {
                 single_result = true;
@@ -119,5 +124,6 @@ public class LCCN {
 
             System.out.println("lccn:[" + call_number + "], author:[" + author + "], title:[" + title + "]");
         }
+        System.out.println("program end");
     }
 }

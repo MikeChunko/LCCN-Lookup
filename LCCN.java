@@ -14,7 +14,7 @@ public class LCCN {
         try {
             // An input file is specified
             if (args[0].contains("-input_file")) {
-                String input_file = args[0].substring(args[0].indexOf("="));
+                String input_file = args[0].substring(args[0].indexOf("=") + 1);
                 BufferedReader br = new BufferedReader(new FileReader(new File(input_file)));
                 while ((search_query = br.readLine()) != null) {
                     System.out.println("Results for '" + search_query + "'");

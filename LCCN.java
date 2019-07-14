@@ -6,10 +6,18 @@ import java.net.URL;
  * @since 2019-07-09
  */
 public class LCCN {
+    // Reference for the console output
+    private static PrintStream console = System.out;
+
     public static void main(String[] args) throws IOException {
         String search_query;
-        boolean output_to_file = false;
-        String output_file = "";
+
+        // An output file is specified
+        if (args.length >= 2 && args[1].contains("-output_file")) {
+            String output_file = args[1].substring(args[1].indexOf("=") + 1);
+            PrintStream out = new PrintStream(new File(output_file));
+            System.setOut(out);
+        }
 
         try {
             // An input file is specified
@@ -17,20 +25,19 @@ public class LCCN {
                 String input_file = args[0].substring(args[0].indexOf("=") + 1);
                 BufferedReader br = new BufferedReader(new FileReader(new File(input_file)));
                 while ((search_query = br.readLine()) != null) {
-                    System.out.println("Results for '" + search_query + "'");
-                    search(search_query, output_to_file, output_file);
+                    System.out.println("Results for '" + search_query + "':");
+                    search(search_query);
                     System.out.println("---------------------------------");
                 }
-            }
-            else { // A single search query is given
+            } else { // A single search query is given
                 search_query = args[0];
-                search(search_query, output_to_file, output_file);
+                search(search_query);
             }
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalArgumentException("Please provide the search query as an argument");
         }
 
-
+        System.setOut(console);
         System.out.println("Program end");
     }
 
@@ -38,11 +45,9 @@ public class LCCN {
      * Does all of the actual searching
      *
      * @param search_query   The term to be searched
-     * @param output_to_file Set to true if it should output to a specific file, false to output to stdout
-     * @param output_file    The output file, if one is specified
      * @throws IOException
      */
-    private static void search(String search_query, boolean output_to_file, String output_file) throws IOException {
+    private static void search(String search_query) throws IOException {
         // The URL to be searched
         search_query = search_query.replaceAll(" ", "+");
         search_query = search_query.replaceAll("\"", "");
